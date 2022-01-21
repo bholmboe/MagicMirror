@@ -47,6 +47,7 @@ Module.register("weather", {
 		colored: false,
 		showFeelsLike: true,
 		feelsLikeUpper: 0, // use showFeelsLike flag unless set
+		absoluteDates: false
 	},
 
 	// Module properties.
