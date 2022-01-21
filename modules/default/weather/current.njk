@@ -1,29 +1,31 @@
 {% if current %}
     {% if not config.onlyTemp %}
         <div class="normal medium">
-            <span class="wi wi-strong-wind dimmed"></span>
-            <span>
-                {% if config.useBeaufort %}
-                    {{ current.beaufortWindSpeed() | round }}
-                {% else %}
-                    {% if config.useKmh %}
-                        {{ current.kmhWindSpeed() | round }}
-                    {% else %}
-                        {{ current.windSpeed | round }}
-                    {% endif %}
-                {% endif %}
-                {% if config.showWindDirection %}
-                    <sup>
-                        {% if config.showWindDirectionAsArrow %}
-                            <i class="fa fa-long-arrow-up" style="transform:rotate({{ current.windDirection }}deg);"></i>
-                        {% else %}
-                            {{ current.cardinalWindDirection() | translate }}
-                        {% endif %}
-                        &nbsp;
-                    </sup>
-                {% endif %}
-            </span>
-            {% if config.showHumidity and current.humidity %}
+          {% if config.showWindSpeed %}
+              <span class="wi wi-strong-wind dimmed"></span>
+              <span>
+                  {% if config.useBeaufort %}
+                      {{ current.beaufortWindSpeed() | round }}
+                  {% else %}
+                      {% if config.useKmh %}
+                          {{ current.kmhWindSpeed() | round }}
+                      {% else %}
+                          {{ current.windSpeed | round }}
+                      {% endif %}
+                  {% endif %}
+                  {% if config.showWindDirection %}
+                      <sup>
+                          {% if config.showWindDirectionAsArrow %}
+                              <i class="fa fa-long-arrow-up" style="transform:rotate({{ current.windDirection }}deg);"></i>
+                          {% else %}
+                              {{ current.cardinalWindDirection() | translate }}
+                          {% endif %}
+                          &nbsp;
+                      </sup>
+                  {% endif %}
+              </span>
+            {% endif %}
+            {% if current.humidity and (config.showHumidity or (config.humidityLower !== 0 and current.humidity > config.humidityLower)) %}
                 <span>{{ current.humidity | decimalSymbol }}</span><sup>&nbsp;<i class="wi wi-humidity humidityIcon"></i></sup>
             {% endif %}
             {% if config.showSun %}
@@ -62,14 +64,15 @@
             </div>
         {% endif %}
     </div>
-    {% if (config.showFeelsLike or config.showPrecipitationAmount) and not config.onlyTemp %}
+    {% set showFeelsLike = config.showFeelsLike or config.feelsLikeUpper !== 0  and current.feelsLike() < config.feelsLikeUpper %}
+    {% if (showFeelsLike or config.showPrecipitationAmount) and not config.onlyTemp %}
         <div class="normal medium feelslike">
-            {% if config.showFeelsLike %}
+            {% if showFeelsLike %}
                 <span class="dimmed">
                     {{ "FEELS" | translate({DEGREE: current.feelsLike() | roundValue | unit("temperature") | decimalSymbol }) }}
                 </span>
             {% endif %}
-            {% if config.showPrecipitationAmount %}
+            {% if config.showPrecipitationAmount and current.precipitation %}
                 <span class="dimmed">
                     {{ "PRECIP" | translate }} {{ current.precipitation | unit("precip") }}
                 </span>

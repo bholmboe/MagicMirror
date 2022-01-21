@@ -21,11 +21,13 @@ Module.register("weather", {
 		timeFormat: config.timeFormat,
 		showPeriod: true,
 		showPeriodUpper: false,
+		showWindSpeed: true,
 		showWindDirection: true,
 		showWindDirectionAsArrow: false,
 		useBeaufort: true,
 		lang: config.language,
 		showHumidity: false,
+		humidityLower: 0, // use showHumidity flag unless set
 		showSun: true,
 		degreeLabel: false,
 		decimalSymbol: ".",
@@ -43,7 +45,8 @@ Module.register("weather", {
 		onlyTemp: false,
 		showPrecipitationAmount: false,
 		colored: false,
-		showFeelsLike: true
+		showFeelsLike: true,
+		feelsLikeUpper: 0, // use showFeelsLike flag unless set
 	},
 
 	// Module properties.
